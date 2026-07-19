@@ -14,36 +14,14 @@ abstract final class AfterFramework {
     _configured = true;
   }
 
-  /// Minimal overrides — replace stubs with Firebase/store adapters as the app grows.
+  /// Standard After overrides — add auth/analytics/push adapters as the app grows.
   static List<Override> createSuperHealthAfterOverrides(
     SharedPreferences preferences,
   ) {
     ensureConfigured();
-    return [
-      afterSharedPreferencesProvider.overrideWithValue(preferences),
-      afterHttpPolicyProvider.overrideWithValue(
-        const AfterHttpPolicy(
-          requireHttps: true,
-          userAgent: 'SuperHealth/0.1.0',
-        ),
-      ),
-      afterFeatureFlagsProvider.overrideWith((ref) {
-        return PrefsAfterFeatureFlags(
-          SharedPreferencesAfterStore(preferences),
-        );
-      }),
-      afterRemoteConfigProvider.overrideWith((ref) {
-        return CachedAfterRemoteConfig(
-          SharedPreferencesAfterStore(preferences),
-        );
-      }),
-      afterLocalNotificationsProvider.overrideWith(
-        (ref) => FlutterAfterLocalNotifications(),
-      ),
-      afterAiCredentialVaultProvider.overrideWith((ref) {
-        return AfterAiCredentialVault(ref.watch(afterSecureStorageProvider));
-      }),
-      afterLoggerProvider.overrideWithValue(const ConsoleAfterLogger()),
-    ];
+    return AfterStandardOverrides.create(
+      preferences: preferences,
+      userAgent: 'SuperHealth/0.1.0',
+    );
   }
 }
