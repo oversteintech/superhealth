@@ -1,35 +1,38 @@
 # SuperHealth
 
-**Status:** Scaffold · next Super App after SuperGarage  
+**Status:** Scaffold on After Framework  
 **Company:** AfterArtificial  
-**Platform:** [After Framework](https://www.afterframework.com)  
-**Engineering:** Overstein Labs
+**Packages:** [`oversteintech/supercore`](https://github.com/oversteintech/supercore)  
+**Docs:** [afterframework.com/start](https://www.afterframework.com/start)
 
-## Intent
+Personal health Super App — vertical features under `lib/features/`. Shared auth, AI, premium, networking, and design system come from After Framework.
 
-Personal health Super App on After Framework — vertical features only; shared auth, AI, premium, design system, networking come from `after_core` + `after_design_system`.
+## Layout
 
-## Bootstrap (when development starts)
+```text
+HANTURAI/
+  supercore/
+  superhealth/   # this repo
+  supergarage/   # flagship reference
+```
 
-1. Depend on After packages (from SuperGarage `packages/` until `oversteintech/supercore` is extracted).
-2. Set `AppPlatformManifest` (unique package / bundle IDs, store flavors).
-3. Create composition root mirroring SuperGarage `lib/app/platform/after_framework.dart`.
-4. Override After Riverpod providers with product adapters.
-5. Ship features under `lib/features/` only.
-6. Follow [Platform Standard](https://www.afterframework.com/standard) checklist.
+## Run
 
-## Do not
+```bash
+flutter pub get
+flutter test
+flutter run
+```
 
-- Fork auth / networking / premium kits
-- Rebuild design tokens from scratch
-- Skip server-verified entitlements or HTTPS Dio policy
+## Composition root
 
-## Related
+- `lib/app/platform/manifest.dart` — `AppPlatformManifest`
+- `lib/app/platform/after_framework.dart` — provider overrides
+- `lib/main.dart` — cold start + `ProviderScope`
 
-| Resource | URL |
-|----------|-----|
-| Products | https://www.afterartificial.com |
-| Framework | https://www.afterframework.com |
-| Labs | https://www.overstein.com |
-| Reference app | SuperGarage (`oversteintech/supergarage`) |
-| Shared packages | `oversteintech/supercore` (target) |
+## Next
+
+- [ ] Auth adapter (Firebase / Supabase)
+- [ ] Entitlements bridge
+- [ ] Health feature modules
+- [ ] Store flavors + listings
