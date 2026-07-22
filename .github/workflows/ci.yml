@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout SuperHealth
+        uses: actions/checkout@v4
+        with:
+          path: superhealth
+
+      - name: Checkout SuperCore
+        uses: actions/checkout@v4
+        with:
+          repository: oversteintech/supercore
+          path: supercore
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: superhealth
+        run: flutter pub get
+
+      - name: Verify formatting
+        working-directory: superhealth
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Static analysis
+        working-directory: superhealth
+        run: flutter analyze
+
+      - name: Unit and widget tests
+        working-directory: superhealth
+        run: flutter test --coverage --reporter compact
+
+      - name: Coverage gate (=50%)
+        working-directory: superhealth
+        run: dart tool/check_coverage.dart 50 coverage/lcov.info
+
+  android-debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: quality
+
+    steps:
+      - name: Checkout SuperHealth
+        uses: actions/checkout@v4
+        with:
+          path: superhealth
+
+      - name: Checkout SuperCore
+        uses: actions/checkout@v4
+        with:
+          repository: oversteintech/supercore
+          path: supercore
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: superhealth
+        run: flutter pub get
+
+      - name: Build Android debug APK
+        working-directory: superhealth
+        run: flutter build apk --debug

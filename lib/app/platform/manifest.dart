@@ -4,8 +4,9 @@ import 'package:after_core/after_core.dart';
 const AppPlatformManifest superHealthManifest = AppPlatformManifest(
   appName: 'SuperHealth',
   appId: 'super_health',
-  packageName: 'com.afterartificial.super_health',
+  packageName: 'com.overstein.superhealth',
   androidWidgetProvider:
-      'com.afterartificial.super_health.SuperHealthWidgetProvider',
-  iosAppGroupId: 'group.com.afterartificial.super_health',
+      'com.overstein.superhealth.SuperHealthWidgetProvider',
+  iosAppGroupId: 'group.com.overstein.superhealth',
+  supportEmail: 'superhealth@overstein.com',
 );

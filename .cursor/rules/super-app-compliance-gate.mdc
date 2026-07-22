@@ -1,0 +1,30 @@
+---
+description: After generating a Super App, audit vs SuperGarage and fix to 100% AAPS skeleton compliance
+alwaysApply: true
+---
+
+# Post-generation SuperGarage compliance gate
+
+After generating or substantially changing any Super App, you MUST:
+
+1. **Compare** the app against SuperGarage (`D:\Projects\HANTURAI\supergarage`) and AAPS (`docs/AFTERARTIFICIAL_PLATFORM_STANDARD_v1.md`).
+2. **Produce** `docs/COMPLIANCE_REPORT.md` listing every architectural difference, naming inconsistency, UI inconsistency, dependency mismatch, design deviation, and code-standard violation (with severity).
+3. **Fix automatically** every applicable issue until the project reaches **100% skeleton compliance** with After Framework + SuperGarage quality/structure.
+4. **Verify** with `flutter analyze`, `flutter test --coverage`, and `dart tool/check_coverage.dart 50 coverage/lcov.info`.
+
+## Non-negotiable identity & contracts
+
+- Package / bundle: `com.overstein.<appid>` (not `com.afterartificial.*`)
+- Manifest const: `lowerCamelCase` (e.g. `superSportsManifest`)
+- OVERSTEIN company splash: black, no product branding, `onComplete` + hard timeout
+- Cold start: splash immediate → parallel prefs/strings → AuthGate → deferred warm only after AuthGate mounts; 12s bootstrap hard timeout
+- No `go_router`; AuthGate → MainShell; feature catalog + navigator
+- Prefer After* design-system widgets; lazy shell tabs
+- CI: checkout `@v5`, sibling `supercore` + token, format, analyze, test `--coverage`, coverage ≥ 50%
+- Domain layer: no Flutter imports
+
+## Accepted deferrals (document, do not pretend they are fixed)
+
+Firebase/Supabase/Drift/IAP/ads/maps/BLE, full 20-locale pack, full Mate orchestrator, store flavors — only when the product leaves the mock skeleton. Do not invent a new architecture for deferred items; keep ports swappable.
+
+When SuperGarage and a sibling diverge, **SuperGarage intentional patterns win**.

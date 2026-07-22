@@ -1,0 +1,13 @@
+{
+  "appId": "super_health",
+  "packageName": "com.afterartificial.superhealth",
+  "apiBaseUrl": "https://api.afterartificial.com/v1/health",
+  "defaultLocale": "en",
+  "supportedLocales": ["en", "tr"],
+  "features": {
+    "aiAssistant": true,
+    "vitalsCharts": true,
+    "medicationReminders": true,
+    "offlineSync": true
+  }
+}

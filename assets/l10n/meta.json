@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "fallback": "en",
+  "languages": [
+    "en",
+    "zh",
+    "hi",
+    "es",
+    "fr",
+    "ar",
+    "bn",
+    "pt",
+    "ru",
+    "ur",
+    "id",
+    "de",
+    "ja",
+    "sw",
+    "mr",
+    "te",
+    "tr",
+    "ta",
+    "vi",
+    "ko"
+  ],
+  "note": "Stubs copy English until translated; runtime falls back to en."
+}

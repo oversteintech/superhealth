@@ -1,7 +1,12 @@
+import 'package:after_ai/after_ai.dart';
+import 'package:after_consumer/after_consumer.dart';
 import 'package:after_core/after_core.dart';
+import 'package:after_firebase/after_firebase.dart';
 import 'package:riverpod/src/internals.dart' show Override;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../family/family_stores.dart';
+import 'adapters/product_analytics.dart';
 import 'manifest.dart';
 
 /// After Framework composition root for SuperHealth.
@@ -14,14 +19,38 @@ abstract final class AfterFramework {
     _configured = true;
   }
 
-  /// Standard After overrides — add auth/analytics/push adapters as the app grows.
   static List<Override> createSuperHealthAfterOverrides(
-    SharedPreferences preferences,
-  ) {
+    SharedPreferences preferences, {
+    String? mockGoogleEmailForTests,
+  }) {
     ensureConfigured();
-    return AfterStandardOverrides.create(
-      preferences: preferences,
-      userAgent: 'SuperHealth/0.1.0',
-    );
+    return [
+      ...AfterStandardOverrides.create(
+        preferences: preferences,
+        userAgent: 'SuperHealth/0.1.0',
+        includeUserBlobSync: false,
+      ),
+      ...AfterFirebaseBootstrap.overrides(
+        preferences: preferences,
+        appId: superHealthManifest.appId,
+        mockGoogleEmailForTests: mockGoogleEmailForTests,
+      ),
+      afterAnalyticsProvider.overrideWith(
+        (ref) => ProductAnalytics(ref.watch(afterLoggerProvider)),
+      ),
+      afterAiProfileProvider.overrideWithValue(
+        AfterAiProfile(
+          appId: superHealthManifest.appId,
+          enabled: const {
+            AfterAiCapability.conversation,
+            AfterAiCapability.summarization,
+            AfterAiCapability.recommendation,
+          },
+        ),
+      ),
+      afterEntitlementProvider.overrideWith((ref) {
+        return ref.watch(healthMembershipProvider).entitlement;
+      }),
+    ];
   }
 }

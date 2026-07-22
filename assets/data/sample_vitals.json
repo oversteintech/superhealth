@@ -1,0 +1,7 @@
+{
+  "source": "mock",
+  "readings": [
+    { "kind": "heartRate", "value": 72, "unit": "bpm" },
+    { "kind": "steps", "value": 6842, "unit": "steps" }
+  ]
+}

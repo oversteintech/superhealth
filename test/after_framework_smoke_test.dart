@@ -12,7 +12,7 @@ void main() {
     expect(PlatformConfig.current.appId, superHealthManifest.appId);
     expect(
       PlatformConfig.current.packageName,
-      'com.afterartificial.super_health',
+      'com.overstein.superhealth',
     );
   });
 

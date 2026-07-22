@@ -1,38 +1,99 @@
 # SuperHealth
 
-**Status:** Scaffold on After Framework  
-**Company:** AfterArtificial  
-**Packages:** [`oversteintech/supercore`](https://github.com/oversteintech/supercore)  
-**Docs:** [afterframework.com/start](https://www.afterframework.com/start)
+**AfterArtificial Super App** for personal health management.
 
-Personal health Super App — vertical features under `lib/features/`. Shared auth, AI, premium, networking, and design system come from After Framework.
+Powered by **After Framework** Â· Built by **Overstein Labs**
 
-## Layout
+| | |
+|---|---|
+| Package | `com.overstein.superhealth` |
+| App ID | `super_health` |
+| Pub name | `super_health` |
+| Domain | Health Management |
+| Flagship reference | [SuperGarage](https://github.com/oversteintech/supergarage) |
 
-```text
-HANTURAI/
-  supercore/
-  superhealth/   # this repo
-  supergarage/   # flagship reference
+## Brand hierarchy
+
+```
+Ayhan Uzundal
+  â†’ AfterArtificial          (product company / Super Apps)
+      â†’ SuperHealth
+  â†’ Powered by After Framework
+  â†’ Built by Overstein Labs
 ```
 
-## Run
+## Architecture
+
+SuperHealth follows the After Framework Super App contract used by SuperGarage:
+
+- Composition root: `lib/app/platform/after_framework.dart`
+- Cold start: Overstein splash â†’ prefs / strings â†’ AuthGate â†’ MainShell
+- Vertical code only under `lib/features/`
+- Shared ports from `after_core` (auth, analytics, flags, remote config, secure storage, HTTP, entitlements, AI vault)
+- UI from `after_design_system`
+- State: Riverpod
+- Feature-first folders with domain / data / presentation layers
+
+### Features (production skeleton)
+
+Splash Â· Onboarding Â· Authentication Â· Dashboard Â· Vitals Â· AI Assistant Â· Search Â· Notifications Â· Profile Â· Settings Â· Membership Â· Medications Â· Appointments Â· Wellness
+
+### Branding
+
+Launcher icon: unique **S+** monogram (family style with SuperGarage SG). Assets live under `assets/branding/` and Android/iOS launcher icons are generated via `dart run flutter_launcher_icons`.
+
+Cross-cutting: Localization Â· Theme Â· Offline banner Â· Analytics Â· Crash reporting Â· Remote config Â· Feature flags Â· Secure storage Â· Navigation Â· DI Â· Networking Â· Logging Â· Error handling
+
+Business data is realistic **mock** data via `MockHealthRepository` â€” swap for live APIs without changing screens.
+
+## Repository layout
+
+```
+HANTURAI/
+  supercore/          # after_core + after_design_system
+  superhealth/        # this app
+```
+
+## Getting started
 
 ```bash
+cd superhealth
 flutter pub get
-flutter test
 flutter run
 ```
 
-## Composition root
+Demo sign-in (prefs-backed auth accepts any email):
 
-- `lib/app/platform/manifest.dart` — `AppPlatformManifest`
-- `lib/app/platform/after_framework.dart` — provider overrides
-- `lib/main.dart` — cold start + `ProviderScope`
+- Email: `member@afterartificial.com`
+- Password: any non-empty value
 
-## Next
+### Sign in as Super Admin
 
-- [ ] Auth adapter (Firebase / Supabase)
-- [ ] Entitlements bridge
-- [ ] Health feature modules
-- [ ] Store flavors + listings
+Sign in with **Google** using `ayhanuzundal@gmail.com` (or any allowlisted
+`overstein.com` admin address). Membership auto-elevates to `SUPER ADMIN`
+(`AfterUserPlan.superadmin`) with every `AfterPlanFeature` unlocked. The
+allowlist lives in `AfterSuperAdmin.emails` (after_core).
+
+> Google Sign-In requires the Google Cloud OAuth client to be configured for
+> `com.overstein.superhealth` (or the current package id if not yet migrated)
+> plus the correct SHA-1 fingerprint. Tests pass `mockGoogleEmailForTests`
+> to `PrefsGoogleAuthRepository` /
+> `AfterFramework.createSuperHealthAfterOverrides` to bypass the plugin.
+
+## Tests
+
+```bash
+flutter test
+flutter analyze
+```
+
+## Documentation
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/AFTER_FRAMEWORK.md](docs/AFTER_FRAMEWORK.md)
+- [docs/FEATURES.md](docs/FEATURES.md)
+- SuperCore: [STANDARD_APIS.md](../supercore/STANDARD_APIS.md)
+
+## CI
+
+GitHub Actions checks out `oversteintech/supercore` as a sibling and runs format, analyze, test, and a debug APK build.

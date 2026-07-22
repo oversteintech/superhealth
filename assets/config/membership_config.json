@@ -1,0 +1,35 @@
+{
+  "version": 3,
+  "recommendedNextTiers": {
+    "free": "premium",
+    "premium": "super",
+    "super": "business",
+    "business": "business"
+  },
+  "plans": {
+    "free": {
+      "badge": "FREE",
+      "title": "Free",
+      "highlight": ""
+    },
+    "premium": {
+      "badge": "SILVER",
+      "title": "Silver",
+      "highlight": "3 months free",
+      "freeTrialMonths": 3
+    },
+    "super": {
+      "badge": "GOLD",
+      "title": "Gold",
+      "highlight": "2 months free",
+      "freeTrialMonths": 2
+    },
+    "business": {
+      "badge": "BUSINESS",
+      "title": "Business",
+      "highlight": "Best for teams"
+    }
+  },
+  "trialDays": 60,
+  "silverTrialDays": 90
+}
