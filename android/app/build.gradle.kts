@@ -14,7 +14,7 @@ if (hasReleaseSigning) {
 }
 android {
     namespace = "com.overstein.superhealth"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

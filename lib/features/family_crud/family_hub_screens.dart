@@ -71,7 +71,10 @@ class FamilySettingsTab extends ConsumerWidget {
           ref.read(familyThemeStyleProvider.notifier).setStyle(s),
       canUsePremiumThemes: true,
       localeCode: ref.watch(localeCodeProvider),
-      onLocale: (c) => ref.read(localeCodeProvider.notifier).setLocale(c),
+      onLocale: (c) {
+        if (c == null) return;
+        ref.read(localeCodeProvider.notifier).setLocale(c);
+      },
       embedded: true,
     );
   }
@@ -86,7 +89,7 @@ class _Feat {
 class FamilyFeatureCatalogScreen extends StatelessWidget {
   const FamilyFeatureCatalogScreen({super.key});
 
-  static final items = <_Feat>[
+    static final items = <_Feat>[
       _Feat('Medications', MedicationsCrudScreen.new),
       _Feat('Medical Records', MedicalRecordsCrudScreen.new),
       _Feat('Doctor Visits', DoctorVisitsCrudScreen.new),

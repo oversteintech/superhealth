@@ -2,6 +2,7 @@ import 'package:after_consumer/after_consumer.dart';
 import 'package:after_design_system/after_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../app/l10n/app_strings.dart';
 
 import '../../app/family/family_stores.dart';
 import '../../app/navigation/shell_navigation.dart';
@@ -40,6 +41,7 @@ class _MainShellState extends ConsumerState<MainShell> {
   @override
   Widget build(BuildContext context) {
     final tab = ref.watch(mainTabProvider);
+    final locale = ref.watch(localeCodeProvider);
     final index = MainTab.values.indexOf(tab);
     _visited.add(index);
     final membership = ref.watch(healthMembershipProvider);
@@ -50,7 +52,6 @@ class _MainShellState extends ConsumerState<MainShell> {
           FamilyShellHeader(
             title: healthChrome.shellTitle,
             plan: membership.plan,
-            onLocationTap: () {},
             onNotifications: () {},
             onAi: () {
               ref.read(mainTabProvider.notifier).select(MainTab.assistant);
@@ -78,31 +79,31 @@ class _MainShellState extends ConsumerState<MainShell> {
         onDestinationSelected: (i) {
           ref.read(mainTabProvider.notifier).select(MainTab.values[i]);
         },
-        destinations: const [
+        destinations: [
           AfterNavDestination(
             icon: Icons.home_outlined,
             selectedIcon: Icons.home,
-            label: 'Home',
+            label: FamilyUiStrings.t('nav_home', locale),
           ),
           AfterNavDestination(
             icon: Icons.sensors_outlined,
             selectedIcon: Icons.sensors,
-            label: 'Live',
+            label: FamilyUiStrings.t('nav_live', locale),
           ),
           AfterNavDestination(
-            icon: Icons.auto_awesome_outlined,
-            selectedIcon: Icons.auto_awesome,
-            label: 'AI',
+            icon: Icons.hub_outlined,
+            selectedIcon: Icons.hub_rounded,
+            label: FamilyUiStrings.t('nav_ai', locale),
           ),
           AfterNavDestination(
             icon: Icons.grid_view_outlined,
             selectedIcon: Icons.grid_view,
-            label: 'Features',
+            label: FamilyUiStrings.t('nav_features', locale),
           ),
           AfterNavDestination(
             icon: Icons.settings_outlined,
             selectedIcon: Icons.settings,
-            label: 'Settings',
+            label: FamilyUiStrings.t('nav_settings', locale),
           ),
         ],
       ),

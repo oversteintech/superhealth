@@ -17,6 +17,7 @@ dependencies:
     path: ../supercore/packages/after_ecosystem
   after_core:
     path: ../supercore/packages/after_core
+  dynamic_app_icon_changer: ^0.0.3
   after_firebase:
     path: ../supercore/packages/after_firebase
   after_design_system:

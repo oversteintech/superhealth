@@ -31,7 +31,10 @@ abstract final class AppRuntimeBootstrap {
 
     final preferences = await SharedPreferences.getInstance();
     final catalog = await StringCatalog.load();
-    final savedLocale = preferences.getString('superhealth.locale');
+    final savedLocale = AfterLocalePrefs.read(
+      preferences,
+      legacyKey: 'superhealth.locale',
+    );
     if (savedLocale != null) {
       catalog.setLocale(savedLocale);
     }

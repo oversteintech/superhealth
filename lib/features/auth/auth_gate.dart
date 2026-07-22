@@ -13,27 +13,30 @@ class AuthGate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionAsync = ref.watch(afterAuthSessionProvider);
-    return sessionAsync.when(
-      loading: () => const Scaffold(body: Center(child: AfterLoading())),
-      error: (e, _) => Scaffold(body: Center(child: Text('Auth error: $e'))),
-      data: (session) {
-        if (session.isLoading) {
-          return const Scaffold(body: Center(child: AfterLoading()));
-        }
-        if (!session.isAuthenticated) {
-          return FamilyLoginScreen(
-            config: healthChrome,
-            authConfig: FamilyAuthChromeConfig(
-              appName: healthChrome.appName,
-              supportEmail: healthChrome.supportEmail,
-              accent: healthChrome.accent,
-              tagline: healthChrome.tagline,
-              aiTitle: healthChrome.aiTitle,
-            ),
-          );
-        }
-        return const FamilySessionEffects(child: MainShell());
-      },
+    return AfterLaunchConsentGate(
+      appName: healthChrome.appName,
+      child: sessionAsync.when(
+        loading: () => const Scaffold(body: Center(child: AfterLoading())),
+        error: (e, _) => Scaffold(body: Center(child: Text('Auth error: $e'))),
+        data: (session) {
+          if (session.isLoading) {
+            return const Scaffold(body: Center(child: AfterLoading()));
+          }
+          if (!session.isAuthenticated) {
+            return FamilyLoginScreen(
+              config: healthChrome,
+              authConfig: FamilyAuthChromeConfig(
+                appName: healthChrome.appName,
+                supportEmail: healthChrome.supportEmail,
+                accent: healthChrome.accent,
+                tagline: healthChrome.tagline,
+                aiTitle: healthChrome.aiTitle,
+              ),
+            );
+          }
+          return const FamilySessionEffects(child: MainShell());
+        },
+      ),
     );
   }
 }
