@@ -17,7 +17,10 @@ class LocaleCodeController extends Notifier<String> {
   @override
   String build() => ref.watch(stringCatalogProvider).locale;
 
-  void setLocale(String code) {
+  void setLocale(String? code) {
+    if (code == null) {
+      return;
+    }
     final catalog = ref.read(stringCatalogProvider);
     catalog.setLocale(code);
     state = catalog.locale;

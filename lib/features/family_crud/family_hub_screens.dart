@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:after_ai/after_ai.dart';
 import 'package:after_consumer/after_consumer.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +76,15 @@ class FamilySettingsTab extends ConsumerWidget {
       onLocale: (c) {
         if (c == null) return;
         ref.read(localeCodeProvider.notifier).setLocale(c);
+      },
+      countryCode: ref.watch(afterCountryCodeProvider),
+      onCountry: (c) {
+        unawaited(
+          ref.read(afterCountryCodeProvider.notifier).setCountry(
+                c,
+                legacyKey: 'superhealth.country',
+              ),
+        );
       },
       embedded: true,
     );

@@ -38,6 +38,7 @@ abstract final class AppRuntimeBootstrap {
     if (savedLocale != null) {
       catalog.setLocale(savedLocale);
     }
+    await AfterCountryPrefs.migrateLegacy(preferences, 'superhealth.country');
     return BootstrapSnapshot(preferences: preferences, catalog: catalog);
   }
 

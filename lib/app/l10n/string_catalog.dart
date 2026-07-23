@@ -59,7 +59,10 @@ class StringCatalog {
     return value;
   }
 
-  void setLocale(String code) {
+  void setLocale(String? code) {
+    if (code == null) {
+      return;
+    }
     if (AfterSupportedLocales.isSupported(code)) {
       locale = code;
     }
