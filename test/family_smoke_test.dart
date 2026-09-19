@@ -27,23 +27,27 @@ void main() {
   test('family store CRUD round-trip', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
+    final listProvider = familyMapListProvider('super_health.smoke_crud_only');
     final container = ProviderContainer(
-      overrides: AfterFramework.createSuperHealthAfterOverrides(prefs),
+      overrides: AfterStandardOverrides.create(
+        preferences: prefs,
+        userAgent: 'SuperHealth/test',
+        includeUserBlobSync: false,
+      ),
     );
     addTearDown(container.dispose);
 
-    final notifier = container.read(medicationsStoreProvider.notifier);
-    final before = container.read(medicationsStoreProvider).length;
+    final notifier = container.read(listProvider.notifier);
+    expect(container.read(listProvider), isEmpty);
     await notifier.upsert(
       const FamilyMapRecord(
         id: 'smoke_1',
         fields: {'name': 'Smoke', 'note': 'round-trip'},
       ),
     );
-    expect(container.read(medicationsStoreProvider).any((e) => e.id == 'smoke_1'), isTrue);
-    expect(container.read(medicationsStoreProvider).length, before + 1);
+    expect(container.read(listProvider).single.id, 'smoke_1');
     await notifier.deleteById('smoke_1');
-    expect(container.read(medicationsStoreProvider).any((e) => e.id == 'smoke_1'), isFalse);
+    expect(container.read(listProvider), isEmpty);
   });
 
   test('family dashboard section sort order', () {

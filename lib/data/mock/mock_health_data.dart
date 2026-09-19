@@ -36,6 +36,8 @@ abstract final class MockHealthData {
     medications: ['Vitamin D3', 'Loratadine'],
     notes: 'Prefers Turkish-speaking clinicians.',
     organDonor: true,
+    enabled: false,
+    lockScreenSharingConsent: false,
   );
 
   static List<VitalReading> vitals() => [

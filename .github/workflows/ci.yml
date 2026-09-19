@@ -47,9 +47,13 @@ jobs:
         working-directory: superhealth
         run: flutter test --coverage --reporter compact
 
-      - name: Coverage gate (=50%)
+      - name: Coverage gate (≥80%)
         working-directory: superhealth
-        run: dart tool/check_coverage.dart 50 coverage/lcov.info
+        run: dart tool/check_coverage.dart 80 coverage/lcov.info
+
+      - name: Smoke functional suite
+        working-directory: superhealth
+        run: flutter test test/smoke --reporter compact
 
   android-debug:
     runs-on: ubuntu-latest

@@ -6,6 +6,7 @@ import 'package:riverpod/src/internals.dart' show Override;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../family/family_stores.dart';
+import '../membership/health_entitlement_bridge.dart';
 import 'adapters/product_analytics.dart';
 import 'manifest.dart';
 
@@ -44,13 +45,10 @@ abstract final class AfterFramework {
           enabled: const {
             AfterAiCapability.conversation,
             AfterAiCapability.summarization,
-            AfterAiCapability.recommendation,
           },
         ),
       ),
-      afterEntitlementProvider.overrideWith((ref) {
-        return ref.watch(healthMembershipProvider).entitlement;
-      }),
+      afterEntitlementProvider.overrideWith(healthEntitlementFromRef),
     ];
   }
 }

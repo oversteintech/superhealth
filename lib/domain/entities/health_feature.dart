@@ -1,8 +1,16 @@
 /// Domain feature catalog — no Flutter imports.
-/// Icons: `lib/app/navigation/health_feature_icons.dart`.
-/// Catalog entry for SuperHealth core features.
 enum HealthFeatureId {
+  timeline,
+  observations,
+  habits,
   medication,
+  appointments,
+  documents,
+  profile,
+  trends,
+  sharing,
+  caregivers,
+  wearableImport,
   medicalRecords,
   doctorVisits,
   labResults,
@@ -30,9 +38,59 @@ class HealthFeature {
 abstract final class HealthFeatureCatalog {
   static const List<HealthFeature> all = [
     HealthFeature(
+      id: HealthFeatureId.timeline,
+      titleKey: 'features.timeline',
+      subtitleKey: 'features.timeline_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.observations,
+      titleKey: 'features.observations',
+      subtitleKey: 'features.observations_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.habits,
+      titleKey: 'features.habits',
+      subtitleKey: 'features.habits_sub',
+    ),
+    HealthFeature(
       id: HealthFeatureId.medication,
       titleKey: 'features.medication',
       subtitleKey: 'features.medication_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.appointments,
+      titleKey: 'features.appointments',
+      subtitleKey: 'features.appointments_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.documents,
+      titleKey: 'features.documents',
+      subtitleKey: 'features.documents_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.profile,
+      titleKey: 'features.profile',
+      subtitleKey: 'features.profile_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.trends,
+      titleKey: 'features.trends',
+      subtitleKey: 'features.trends_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.sharing,
+      titleKey: 'features.sharing',
+      subtitleKey: 'features.sharing_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.caregivers,
+      titleKey: 'features.caregivers',
+      subtitleKey: 'features.caregivers_sub',
+    ),
+    HealthFeature(
+      id: HealthFeatureId.wearableImport,
+      titleKey: 'features.wearable_import',
+      subtitleKey: 'features.wearable_import_sub',
     ),
     HealthFeature(
       id: HealthFeatureId.medicalRecords,

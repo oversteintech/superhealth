@@ -50,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
                   ],
                   const SizedBox(height: 4),
                   Text(
-                    '${profile.ageYears} yrs · ${profile.bloodType} · BMI ${profile.bmi.toStringAsFixed(1)}',
+                    '${profile.ageYears} yrs · preferred units on device',
                   ),
                   const SizedBox(height: 8),
                   Chip(

@@ -1,19 +1,35 @@
 # SuperHealth core features
 
-Domain: **Health Management**
+Domain: **Personal health diary** (not diagnosis / treatment / medical device)
 
-| Feature | Path | Mock data |
-|---------|------|-----------|
-| Medication | `features/medications/` | Doses, schedules, taken-today |
-| Medical Records | `features/medical_records/` | Clinical summaries, imaging |
-| Doctor Visits | `features/doctor_visits/` | Upcoming + past visits |
-| Lab Results | `features/lab_results/` | Panels with normal/high/low |
-| Vaccinations | `features/vaccinations/` | Doses, lots, next due |
-| Heart Rate | `features/heart_rate/` | Samples + sparkline |
-| Weight | `features/weight/` | Entries + delta |
-| Sleep | `features/sleep/` | Sessions, deep/REM |
-| Nutrition | `features/nutrition/` | Meals + macros |
-| Health AI | `features/assistant/` | SuperHealth Mate |
-| Emergency Card | `features/emergency_card/` | Blood type, allergies, contact |
+## Always free (no paywall)
 
-Dashboard exposes all eleven as a tappable **Core features** grid via `HealthFeatureCatalog` + `HealthFeatureNavigator`.
+| Feature | Path |
+|---------|------|
+| Timeline | `features/timeline/` |
+| Measurements | `features/observations/` |
+| Routines | `features/habits/` |
+| Medication + adherence | `features/medications/` |
+| Appointments | `features/appointments/` |
+| Document vault | `features/documents/` |
+| Profile | `features/profile/` |
+| Trends (gaps not filled) | `features/trends/` |
+| Sharing CSV/PDF + revoke | `features/sharing/` |
+| Wearable import (Demo) | `features/wearable/` |
+| Emergency card (default off) | `features/profile/` + emergency |
+| Privacy / export / delete | `features/privacy/` |
+| Health AI (limited, selected records) | `features/assistant/` |
+
+## Plan-gated (Silver / Gold / Business)
+
+| Capability | Free | Silver | Gold | Business |
+|------------|------|--------|------|----------|
+| Personal records | ✓ | ✓ | ✓ | ✓ |
+| Premium themes | | ✓ | ✓ | ✓ |
+| PDF export extras | | ✓ | ✓ | ✓ |
+| Unlimited Mate | | | ✓ | ✓ |
+| Care circle invites | | | ✓ | ✓ |
+| Full cloud sync | | | ✓ | ✓ |
+| Org / fleet dashboard | | | | ✓ |
+
+Legacy Family CRUD kit screens remain under `features/family_crud/` for Garage parity.

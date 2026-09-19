@@ -16,6 +16,10 @@ analyzer:
     avoid_print: ignore
     undefined_lint: ignore
     unnecessary_ignore: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
 
 linter:
   rules:

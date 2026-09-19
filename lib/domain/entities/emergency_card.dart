@@ -9,6 +9,9 @@ class EmergencyCard {
     this.medications = const [],
     this.notes = '',
     this.organDonor = false,
+    this.enabled = false,
+    this.lockScreenSharingConsent = false,
+    this.updatedAt,
   });
 
   final String fullName;
@@ -20,4 +23,7 @@ class EmergencyCard {
   final List<String> medications;
   final String notes;
   final bool organDonor;
+  final bool enabled;
+  final bool lockScreenSharingConsent;
+  final DateTime? updatedAt;
 }

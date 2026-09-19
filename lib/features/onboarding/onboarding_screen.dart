@@ -1,8 +1,10 @@
 import 'package:after_design_system/after_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app/l10n/app_strings.dart';
+import '../../domain/records/consent_grant.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({required this.onFinished, super.key});
@@ -16,6 +18,8 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _controller = PageController();
   var _index = 0;
+  var _localStoreConsent = false;
+  var _remindersConsent = false;
 
   late final _pages = [
     (
@@ -29,9 +33,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       icon: Icons.medication_outlined,
     ),
     (
-      titleKey: 'onboarding.page3_title',
-      bodyKey: 'onboarding.page3_body',
-      icon: Icons.auto_awesome_outlined,
+      titleKey: 'onboarding.consent_title',
+      bodyKey: 'onboarding.consent_body',
+      icon: Icons.privacy_tip_outlined,
     ),
   ];
 
@@ -41,8 +45,27 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
+  Future<void> _persistConsents() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('super_health.consent.local_store', _localStoreConsent);
+    await prefs.setBool('super_health.consent.reminders', _remindersConsent);
+    await prefs.setString(
+      'super_health.consent.version',
+      'p0-1',
+    );
+    // Record purpose enums for audit (values only — no clinical payload).
+    final recorded = [
+      ConsentPurpose.localHealthStore.name,
+      if (_remindersConsent) ConsentPurpose.reminders.name,
+    ];
+    await prefs.setStringList('super_health.consent.purposes', recorded);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isConsentPage = _index == _pages.length - 1;
+    final canFinish = !isConsentPage || _localStoreConsent;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -54,6 +77,39 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 onPageChanged: (i) => setState(() => _index = i),
                 itemBuilder: (context, i) {
                   final page = _pages[i];
+                  if (i == _pages.length - 1) {
+                    return Padding(
+                      padding: const EdgeInsets.all(28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ref.tr(page.titleKey),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(ref.tr(page.bodyKey)),
+                          const SizedBox(height: 24),
+                          CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            value: _localStoreConsent,
+                            onChanged: (v) => setState(
+                              () => _localStoreConsent = v ?? false,
+                            ),
+                            title: Text(ref.tr('onboarding.consent_local')),
+                          ),
+                          CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            value: _remindersConsent,
+                            onChanged: (v) => setState(
+                              () => _remindersConsent = v ?? false,
+                            ),
+                            title: Text(ref.tr('onboarding.consent_reminders')),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(28),
                     child: Column(
@@ -101,20 +157,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.all(24),
               child: AfterButton(
-                label: _index == _pages.length - 1
+                label: isConsentPage
                     ? ref.tr('onboarding.get_started')
                     : ref.tr('onboarding.next'),
                 expand: true,
-                onPressed: () async {
-                  if (_index < _pages.length - 1) {
-                    await _controller.nextPage(
-                      duration: const Duration(milliseconds: 280),
-                      curve: Curves.easeOut,
-                    );
-                  } else {
-                    await widget.onFinished();
-                  }
-                },
+                onPressed: !canFinish
+                    ? null
+                    : () async {
+                        if (_index < _pages.length - 1) {
+                          await _controller.nextPage(
+                            duration: const Duration(milliseconds: 280),
+                            curve: Curves.easeOut,
+                          );
+                        } else {
+                          await _persistConsents();
+                          await widget.onFinished();
+                        }
+                      },
               ),
             ),
           ],

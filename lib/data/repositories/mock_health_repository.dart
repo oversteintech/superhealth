@@ -120,23 +120,21 @@ class MockHealthRepository implements HealthRepository {
     final lower = prompt.toLowerCase();
     if (lower.contains('sleep')) {
       return const [
-        'Your latest sleep session was about 7.4 hours with a quality score of 82.',
-        'A consistent bedtime window usually helps more than weekend catch-up.',
-        'This is general wellness guidance — not a medical diagnosis.',
+        'I do not load sleep sessions unless you select them in the timeline.',
+        'This is general orientation — not a medical diagnosis.',
       ];
     }
     if (lower.contains('heart') || lower.contains('pulse')) {
       return const [
-        'Your most recent resting heart rate reading is around 72 bpm.',
-        'That sits in a typical calm range for many adults at rest.',
+        'Heart-rate values stay on your device until you choose a record to explain.',
         'Contact a clinician if you notice chest pain, dizziness, or sudden changes.',
       ];
     }
     if (lower.contains('lab') || lower.contains('cholesterol')) {
       return const [
-        'Your LDL cholesterol is flagged high in the latest mock lab panel.',
-        'Bring the result to your clinician before changing any treatment.',
-        'I cannot diagnose or prescribe — SuperHealth Mate is for orientation only.',
+        'Lab files are not attached to this chat by default.',
+        'Bring results to your clinician before changing any treatment.',
+        'I cannot diagnose or prescribe.',
       ];
     }
     if (lower.contains('vaccin') || lower.contains('aşı') || lower.contains('asi')) {
@@ -148,12 +146,12 @@ class MockHealthRepository implements HealthRepository {
     }
     if (lower.contains('emergency')) {
       return const [
-        'Your Emergency Card includes blood type A+, penicillin allergy, and Mehmet Yılmaz as contact.',
-        'Keep the card updated before travel or procedures.',
+        'Emergency card details are not sent to Mate unless you enable the card and select fields.',
+        'Lock-screen sharing stays off until you give a separate consent.',
       ];
     }
     return [
-      'I am SuperHealth Mate — I can help review medications, visits, labs, sleep, and nutrition.',
+      'I am SuperHealth Mate. I do not receive your records unless you select them.',
       'You asked: "$prompt"',
       'I am not a doctor. For diagnosis or emergencies, seek professional care.',
     ];

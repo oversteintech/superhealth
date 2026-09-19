@@ -22,7 +22,16 @@ class EmergencyCardScreen extends ConsumerWidget {
       body: async.when(
         loading: () => const Center(child: AfterLoading()),
         error: (e, _) => Center(child: Text('$e')),
-        data: (card) => AfterScaffoldBody(
+        data: (card) {
+          if (!card.enabled) {
+            return AfterEmptyState(
+              title: ref.tr('emergency.disabled_title'),
+              subtitle: ref.tr('emergency.disabled_body'),
+              kind: AfterEmptyKind.locked,
+              icon: Icons.lock_outline,
+            );
+          }
+          return AfterScaffoldBody(
           child: ListView(
             children: [
               AfterCard(
@@ -103,7 +112,8 @@ class EmergencyCardScreen extends ConsumerWidget {
               ),
             ],
           ),
-        ),
+        );
+        },
       ),
     );
   }

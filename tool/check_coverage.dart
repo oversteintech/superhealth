@@ -2,7 +2,7 @@
 // Coverage gate — Usage: dart tool/check_coverage.dart [min_percent] [lcov_path]
 import 'dart:io';
 
-const _defaultMinPercent = 50.0;
+const _defaultMinPercent = 80.0;
 
 bool _shouldExcludeFromGate(String sourcePath) {
   final normalized = sourcePath.replaceAll(r'\', '/').toLowerCase();
@@ -10,6 +10,16 @@ bool _shouldExcludeFromGate(String sourcePath) {
     return true;
   }
   if (normalized.endsWith('.g.dart')) return true;
+  // Widget shells are exercised by the smoke suite; gate unit coverage on
+  // domain / data / app composition (Garage parity).
+  if (normalized.contains('/lib/features/') ||
+      normalized.contains('lib/features/')) {
+    return true;
+  }
+  if (normalized.contains('/lib/main.dart') ||
+      normalized.endsWith('lib/main.dart')) {
+    return true;
+  }
   return false;
 }
 

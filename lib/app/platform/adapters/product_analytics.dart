@@ -1,7 +1,8 @@
 import 'package:after_core/after_core.dart';
 
-/// Product analytics adapter — logs events through After logger until a store
-/// SDK (Firebase Analytics, etc.) is wired behind the same port.
+import '../../../domain/privacy/sensitive_payload_filter.dart';
+
+/// Product analytics — never forwards clinical values or free-text health notes.
 class ProductAnalytics implements AfterAnalytics {
   ProductAnalytics(this._logger);
 
@@ -13,20 +14,26 @@ class ProductAnalytics implements AfterAnalytics {
     String name, {
     Map<String, Object?> parameters = const {},
   }) async {
-    events.add({'name': name, ...parameters});
-    _logger.i('analytics:$name', extras: parameters);
+    final safe = SensitivePayloadFilter.sanitize(parameters);
+    events.add({'name': name, ...safe});
+    _logger.i('analytics:$name', extras: safe);
   }
 
   @override
   Future<void> setUserId(String? userId) async {
-    _logger.i('analytics:setUserId', extras: {'userId': userId});
+    // Opaque id only — do not log email.
+    _logger.i(
+      'analytics:setUserId',
+      extras: {'has_user': userId != null && userId.isNotEmpty},
+    );
   }
 
   @override
   Future<void> setUserProperty(String name, String? value) async {
+    if (SensitivePayloadFilter.containsSensitive({name: value})) return;
     _logger.i(
       'analytics:setUserProperty',
-      extras: {'name': name, 'value': value},
+      extras: SensitivePayloadFilter.sanitize({name: value}),
     );
   }
 

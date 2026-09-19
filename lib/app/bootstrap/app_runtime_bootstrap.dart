@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
 import '../config/feature_flag_keys.dart';
 import '../config/remote_config_keys.dart';
+import '../../data/providers/record_providers.dart';
 import '../l10n/app_strings.dart';
 import '../l10n/string_catalog.dart';
 import '../platform/crash_reporting.dart';
@@ -45,6 +46,7 @@ abstract final class AppRuntimeBootstrap {
   static List<Override> overrides(BootstrapSnapshot snapshot) {
     return [
       stringCatalogProvider.overrideWithValue(snapshot.catalog),
+      sharedPreferencesProvider.overrideWithValue(snapshot.preferences),
     ];
   }
 

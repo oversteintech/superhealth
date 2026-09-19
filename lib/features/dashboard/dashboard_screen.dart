@@ -124,6 +124,18 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
           FamilyDashboardSection(
+            id: 'missing',
+            priority: FamilyDashboardPriority.actionRequired,
+            order: 0,
+            builder: (_) => Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: AfterInlineBanner(
+                message: ref.tr('dashboard.missing_data'),
+                icon: Icons.info_outline,
+              ),
+            ),
+          ),
+          FamilyDashboardSection(
             id: 'vitals',
             priority: FamilyDashboardPriority.dailyValue,
             order: 1,
@@ -217,7 +229,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
           FamilyDashboardSection(
-            id: 'insights',
+            id: 'reminders',
             priority: FamilyDashboardPriority.secondary,
             order: 2,
             builder: (_) => Padding(
@@ -231,9 +243,6 @@ class DashboardScreen extends ConsumerWidget {
                         contentPadding: EdgeInsets.zero,
                         title: Text(insight.title),
                         subtitle: Text(insight.body),
-                        trailing: insight.isPremium
-                            ? const Chip(label: Text('PRO'))
-                            : null,
                       ),
                   ],
                 ),
