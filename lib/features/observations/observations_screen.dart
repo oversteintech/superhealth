@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/observation.dart';
+import '../common/widgets/health_record_card.dart';
 
 class ObservationsScreen extends ConsumerStatefulWidget {
   const ObservationsScreen({super.key});
@@ -64,16 +65,13 @@ class _ObservationsScreenState extends ConsumerState<ObservationsScreen> {
                   for (final o in items)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: AfterCard(
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text('${o.type.name}: ${o.value} ${o.unit}'),
-                          subtitle: Text(
-                            '${o.measuredAtUtc.toLocal()}\n'
-                            '${o.sourceKind.name}/${o.sourceId}',
-                          ),
-                          isThreeLine: true,
-                        ),
+                      child: HealthRecordCard(
+                        title: '${o.type.name}: ${o.value} ${o.unit}',
+                        lines: [
+                          '${o.measuredAtUtc.toLocal()}',
+                          '${o.sourceKind.name}/${o.sourceId}',
+                          if (o.reliabilityNote.isNotEmpty) o.reliabilityNote,
+                        ],
                       ),
                     ),
                 ],

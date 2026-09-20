@@ -49,16 +49,26 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('super_health.consent.local_store', _localStoreConsent);
     await prefs.setBool('super_health.consent.reminders', _remindersConsent);
-    await prefs.setString(
-      'super_health.consent.version',
-      'p0-1',
-    );
-    // Record purpose enums for audit (values only — no clinical payload).
+    await prefs.setString('super_health.consent.version', 'p0-1');
     final recorded = [
       ConsentPurpose.localHealthStore.name,
       if (_remindersConsent) ConsentPurpose.reminders.name,
     ];
     await prefs.setStringList('super_health.consent.purposes', recorded);
+  }
+
+  Widget _scrollPage({required Widget child}) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(28),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 56),
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -78,8 +88,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 itemBuilder: (context, i) {
                   final page = _pages[i];
                   if (i == _pages.length - 1) {
-                    return Padding(
-                      padding: const EdgeInsets.all(28),
+                    return _scrollPage(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -97,6 +106,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               () => _localStoreConsent = v ?? false,
                             ),
                             title: Text(ref.tr('onboarding.consent_local')),
+                            controlAffinity: ListTileControlAffinity.leading,
                           ),
                           CheckboxListTile(
                             contentPadding: EdgeInsets.zero,
@@ -105,13 +115,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               () => _remindersConsent = v ?? false,
                             ),
                             title: Text(ref.tr('onboarding.consent_reminders')),
+                            controlAffinity: ListTileControlAffinity.leading,
                           ),
                         ],
                       ),
                     );
                   }
-                  return Padding(
-                    padding: const EdgeInsets.all(28),
+                  return _scrollPage(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

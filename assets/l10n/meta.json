@@ -23,5 +23,5 @@
     "vi",
     "ko"
   ],
-  "note": "Stubs copy English until translated; runtime falls back to en."
+  "note": "Full 20-locale pack synced with en; runtime falls back to en."
 }

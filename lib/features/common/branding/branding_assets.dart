@@ -1,16 +1,15 @@
 /// Canonical branding asset paths for SuperHealth.
 ///
-/// SuperHealth ships the S+ monogram — the family-style interlocking
-/// black/red→purple→blue mark that mirrors the SuperGarage SG monogram.
+/// Approved mark: glossy red heart frame with glowing DNA helix.
 abstract final class BrandingAssets {
-  /// Official S+ monogram — transparent background for in-app / splash.
+  /// In-app monogram — heart + DNA.
   static const monogram = 'assets/branding/super_health_monogram.png';
 
-  /// Adaptive icon foreground — S+ monogram with safe-area padding.
+  /// Adaptive icon foreground.
   static const monogramForeground =
       'assets/branding/super_health_monogram_foreground.png';
 
-  /// Store launcher — S+ monogram on pure black.
+  /// Store / launcher icon.
   static const monogramStore =
       'assets/branding/super_health_monogram_store.png';
 

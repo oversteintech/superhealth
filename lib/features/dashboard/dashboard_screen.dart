@@ -10,6 +10,7 @@ import '../../app/navigation/health_feature_navigator.dart';
 import '../../app/navigation/health_feature_icons.dart';
 import '../../app/offline/offline_controller.dart';
 import '../../domain/entities/health_feature.dart';
+import '../common/widgets/health_record_card.dart';
 import '../common/widgets/metric_tile.dart';
 import '../common/widgets/section_card.dart';
 import 'dashboard_controller.dart';
@@ -32,6 +33,11 @@ class DashboardScreen extends ConsumerWidget {
       error: (e, _) => Center(child: Text('$e')),
       data: (data) {
         final topVitals = data.vitals.take(4).toList();
+        final width = MediaQuery.sizeOf(context).width;
+        final textScale = MediaQuery.textScalerOf(context).scale(1);
+        final featureColumns = width < 360 || textScale > 1.2 ? 1 : 2;
+        final vitalColumns = width < 360 || textScale > 1.2 ? 1 : 2;
+
         final sections = sortFamilyDashboardSections([
           FamilyDashboardSection(
             id: 'hero',
@@ -46,10 +52,16 @@ class DashboardScreen extends ConsumerWidget {
                       'name': data.profile.displayName.split(' ').first,
                     },
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 4),
-                Text(welcome),
+                Text(
+                  welcome,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
@@ -80,12 +92,11 @@ class DashboardScreen extends ConsumerWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: HealthFeatureCatalog.all.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: featureColumns,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
-                      childAspectRatio: 1.55,
+                      mainAxisExtent: textScale > 1.2 ? 128 : 112,
                     ),
                     itemBuilder: (context, index) {
                       final feature = HealthFeatureCatalog.all[index];
@@ -102,17 +113,21 @@ class DashboardScreen extends ConsumerWidget {
                               HealthFeatureIcons.iconFor(feature.id),
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            const Spacer(),
+                            const SizedBox(height: 8),
                             Text(
                               ref.tr(feature.titleKey),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             const SizedBox(height: 2),
-                            Text(
-                              ref.tr(feature.subtitleKey),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall,
+                            Expanded(
+                              child: Text(
+                                ref.tr(feature.subtitleKey),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ),
                           ],
                         ),
@@ -141,21 +156,24 @@ class DashboardScreen extends ConsumerWidget {
             order: 1,
             builder: (_) => Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: GridView.count(
+              child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.35,
-                children: [
-                  for (final vital in topVitals)
-                    MetricTile(
-                      label: vital.label,
-                      value: vital.displayValue,
-                      unit: vital.unit,
-                    ),
-                ],
+                itemCount: topVitals.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: vitalColumns,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  mainAxisExtent: textScale > 1.2 ? 128 : 112,
+                ),
+                itemBuilder: (context, index) {
+                  final vital = topVitals[index];
+                  return MetricTile(
+                    label: vital.label,
+                    value: vital.displayValue,
+                    unit: vital.unit,
+                  );
+                },
               ),
             ),
           ),
@@ -179,16 +197,19 @@ class DashboardScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     for (final med in data.medications.take(3))
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: Icon(
-                          med.takenToday
-                              ? Icons.check_circle
-                              : Icons.schedule,
-                          color: Theme.of(context).colorScheme.primary,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: HealthRecordCard(
+                          boxed: false,
+                          leading: Icon(
+                            med.takenToday
+                                ? Icons.check_circle
+                                : Icons.schedule,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          title: med.name,
+                          lines: ['${med.dosage} · ${med.schedule}'],
                         ),
-                        title: Text(med.name),
-                        subtitle: Text('${med.dosage} · ${med.schedule}'),
                       ),
                   ],
                 ),
@@ -214,14 +235,17 @@ class DashboardScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     for (final visit in data.visits.take(2))
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(Icons.event_outlined),
-                        title: Text(visit.reason),
-                        subtitle: Text(
-                          '${visit.clinician}\n${visit.startsAt}',
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: HealthRecordCard(
+                          boxed: false,
+                          leading: const Icon(Icons.event_outlined),
+                          title: visit.reason,
+                          lines: [
+                            visit.clinician,
+                            '${visit.startsAt}',
+                          ],
                         ),
-                        isThreeLine: true,
                       ),
                   ],
                 ),
@@ -239,10 +263,14 @@ class DashboardScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     for (final insight in data.insights)
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(insight.title),
-                        subtitle: Text(insight.body),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: HealthRecordCard(
+                          boxed: false,
+                          title: insight.title,
+                          lines: [insight.body],
+                          lineMaxLines: 4,
+                        ),
                       ),
                   ],
                 ),

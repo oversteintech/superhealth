@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/care_circle_member.dart';
+import '../common/widgets/health_record_card.dart';
 
 class CaregiversScreen extends ConsumerStatefulWidget {
   const CaregiversScreen({super.key});
@@ -51,25 +52,25 @@ class _CaregiversScreenState extends ConsumerState<CaregiversScreen> {
               )
             else
               for (final m in members)
-                AfterCard(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(m.memberLabel),
-                    subtitle: Text(
-                      '${m.role.name} · fields: '
-                      '${m.visibleFields.isEmpty ? ref.tr('caregivers.none') : m.visibleFields.map((e) => e.name).join(', ')}'
-                      '${m.hasFullAccess ? ' · FULL' : ''}',
-                    ),
-                    trailing: TextButton(
-                      onPressed: () async {
-                        await repo.revokeCareMember(
-                          ownerUserId: userId,
-                          memberId: m.id,
-                        );
-                        setState(() {});
-                      },
-                      child: Text(ref.tr('caregivers.revoke')),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: HealthRecordCard(
+                    title: m.memberLabel,
+                    lines: [
+                      '${m.role.name} · fields: ${m.visibleFields.isEmpty ? ref.tr('caregivers.none') : m.visibleFields.map((e) => e.name).join(', ')}${m.hasFullAccess ? ' · FULL' : ''}',
+                    ],
+                    actions: [
+                      TextButton(
+                        onPressed: () async {
+                          await repo.revokeCareMember(
+                            ownerUserId: userId,
+                            memberId: m.id,
+                          );
+                          setState(() {});
+                        },
+                        child: Text(ref.tr('caregivers.revoke')),
+                      ),
+                    ],
                   ),
                 ),
           ],

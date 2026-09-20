@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/health_document.dart';
+import '../common/widgets/health_record_card.dart';
 
 class DocumentsVaultScreen extends ConsumerStatefulWidget {
   const DocumentsVaultScreen({super.key});
@@ -57,14 +58,13 @@ class _DocumentsVaultScreenState extends ConsumerState<DocumentsVaultScreen> {
                 separatorBuilder: (_, _) => const SizedBox(height: 8),
                 itemBuilder: (context, i) {
                   final d = items[i];
-                  return AfterCard(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(d.title),
-                      subtitle: Text(
-                        '${d.kind.name} · ${d.documentDate.toLocal()}',
-                      ),
-                      trailing: IconButton(
+                  return HealthRecordCard(
+                    title: d.title,
+                    lines: [
+                      '${d.kind.name} · ${d.documentDate.toLocal()}',
+                    ],
+                    actions: [
+                      IconButton(
                         tooltip: ref.tr('documents.delete'),
                         icon: const Icon(Icons.delete_outline),
                         onPressed: () async {
@@ -75,7 +75,7 @@ class _DocumentsVaultScreenState extends ConsumerState<DocumentsVaultScreen> {
                           setState(() {});
                         },
                       ),
-                    ),
+                    ],
                   );
                 },
               ),

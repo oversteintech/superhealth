@@ -18,26 +18,44 @@ class MetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = accent ?? Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
     return AfterCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(height: 4),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-          ),
-          Text(unit, style: Theme.of(context).textTheme.bodySmall),
-        ],
+              ),
+              Text(
+                unit,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

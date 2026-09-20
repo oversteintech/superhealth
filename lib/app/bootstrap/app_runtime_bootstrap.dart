@@ -31,6 +31,7 @@ abstract final class AppRuntimeBootstrap {
     );
 
     final preferences = await SharedPreferences.getInstance();
+    await AfterPrefsMigration.migrateSharedSettings(preferences);
     final catalog = await StringCatalog.load();
     final savedLocale = AfterLocalePrefs.read(
       preferences,

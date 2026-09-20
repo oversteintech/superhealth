@@ -65,16 +65,24 @@ class _MedicationsScreenState extends ConsumerState<MedicationsScreen> {
                         children: [
                           Text(
                             med.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 4),
-                          Text(med.instructionAsEntered),
+                          Text(
+                            med.instructionAsEntered,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             SensitiveNotificationCopy.medicationReminder(
                               medicationName: med.name,
                               instruction: med.instructionAsEntered,
                             ).lockScreenBody,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(height: 12),

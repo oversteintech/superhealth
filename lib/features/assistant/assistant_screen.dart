@@ -86,10 +86,10 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
                 ),
               ),
               const SizedBox(width: 8),
-              AfterButton(
-                label: ref.tr('assistant.send'),
-                variant: AfterButtonVariant.ai,
+              IconButton.filled(
+                tooltip: ref.tr('assistant.send'),
                 onPressed: state.busy ? null : _send,
+                icon: const Icon(Icons.send_rounded),
               ),
             ],
           ),

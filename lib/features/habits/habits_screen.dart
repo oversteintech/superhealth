@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/habit_record.dart';
+import '../common/widgets/health_record_card.dart';
 
 class HabitsScreen extends ConsumerStatefulWidget {
   const HabitsScreen({super.key});
@@ -62,14 +63,13 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
                   for (final g in goals)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: AfterCard(
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(g.title),
-                          subtitle: Text(
-                            '${ref.tr('habits.target')}: ${g.targetPerDay} ${g.unitLabel}',
-                          ),
-                          trailing: AfterButton(
+                      child: HealthRecordCard(
+                        title: g.title,
+                        lines: [
+                          '${ref.tr('habits.target')}: ${g.targetPerDay} ${g.unitLabel}',
+                        ],
+                        actions: [
+                          AfterButton(
                             label: ref.tr('habits.log'),
                             onPressed: () async {
                               final prior = logs
@@ -87,12 +87,14 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen> {
                               );
                               if (!mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(ref.tr('habits.logged'))),
+                                SnackBar(
+                                  content: Text(ref.tr('habits.logged')),
+                                ),
                               );
                               setState(() {});
                             },
                           ),
-                        ),
+                        ],
                       ),
                     ),
                 ],

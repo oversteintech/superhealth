@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/share_grant.dart';
+import '../common/widgets/health_record_card.dart';
 
 class SharingScreen extends ConsumerStatefulWidget {
   const SharingScreen({super.key});
@@ -75,26 +76,26 @@ class _SharingScreenState extends ConsumerState<SharingScreen> {
               Text(ref.tr('sharing.none'))
             else
               for (final g in grants)
-                AfterCard(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(g.recipientLabel),
-                    subtitle: Text(
-                      '${g.format.name} · '
-                      '${g.isActive ? ref.tr('sharing.active') : ref.tr('sharing.revoked')} · '
-                      'exp ${g.expiresAt.toLocal()}',
-                    ),
-                    trailing: g.isActive
-                        ? TextButton(
-                            onPressed: () async {
-                              await repo.revokeShare(
-                                ownerUserId: userId,
-                                grantId: g.id,
-                              );
-                              setState(() {});
-                            },
-                            child: Text(ref.tr('sharing.revoke')),
-                          )
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: HealthRecordCard(
+                    title: g.recipientLabel,
+                    lines: [
+                      '${g.format.name} · ${g.isActive ? ref.tr('sharing.active') : ref.tr('sharing.revoked')} · exp ${g.expiresAt.toLocal()}',
+                    ],
+                    actions: g.isActive
+                        ? [
+                            TextButton(
+                              onPressed: () async {
+                                await repo.revokeShare(
+                                  ownerUserId: userId,
+                                  grantId: g.id,
+                                );
+                                setState(() {});
+                              },
+                              child: Text(ref.tr('sharing.revoke')),
+                            ),
+                          ]
                         : null,
                   ),
                 ),
@@ -111,11 +112,10 @@ class _SharingScreenState extends ConsumerState<SharingScreen> {
             const SizedBox(height: 16),
             AfterSectionHeader(title: ref.tr('sharing.audit')),
             for (final e in audit)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(e.action),
-                subtitle: Text('${e.entityType} ${e.entityId}'),
-                dense: true,
+              HealthRecordCard(
+                boxed: false,
+                title: e.action,
+                lines: ['${e.entityType} ${e.entityId}'],
               ),
           ],
         ),

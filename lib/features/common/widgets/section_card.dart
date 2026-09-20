@@ -19,19 +19,18 @@ class SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AfterCard(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: AfterSectionHeader(
-                  title: title,
-                  subtitle: subtitle,
-                ),
-              ),
-              ?trailing,
-            ],
+          AfterSectionHeader(
+            title: title,
+            subtitle: subtitle,
           ),
+          if (trailing != null) ...[
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: trailing,
+            ),
+          ],
           const SizedBox(height: 12),
           child,
         ],

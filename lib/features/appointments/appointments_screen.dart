@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
 import '../../domain/records/care_appointment.dart';
+import '../common/widgets/health_record_card.dart';
 
 class AppointmentsScreen extends ConsumerWidget {
   const AppointmentsScreen({super.key});
@@ -51,16 +52,13 @@ class AppointmentsScreen extends ConsumerWidget {
                 separatorBuilder: (_, _) => const SizedBox(height: 8),
                 itemBuilder: (context, i) {
                   final a = items[i];
-                  return AfterCard(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(a.title),
-                      subtitle: Text(
-                        '${a.clinicianName}\n${a.location}\n'
-                        '${a.startsAt.toLocal()}',
-                      ),
-                      isThreeLine: true,
-                    ),
+                  return HealthRecordCard(
+                    title: a.title,
+                    lines: [
+                      a.clinicianName,
+                      a.location,
+                      '${a.startsAt.toLocal()}',
+                    ],
                   );
                 },
               ),

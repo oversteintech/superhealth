@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/infrastructure_providers.dart';
+import '../common/widgets/health_record_card.dart';
 
 final vaccinationsProvider = FutureProvider((ref) {
   return ref.watch(healthRepositoryProvider).getVaccinations();
@@ -23,20 +24,19 @@ class VaccinationsScreen extends ConsumerWidget {
         data: (items) => AfterScaffoldBody(
           child: ListView.separated(
             itemCount: items.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final vac = items[index];
-              return ListTile(
+              return HealthRecordCard(
                 leading: const Icon(Icons.vaccines_outlined),
-                title: Text(vac.name),
-                subtitle: Text(
-                  '${vac.doseLabel}\n'
-                  '${vac.provider}'
-                  '${vac.lotNumber != null ? ' · lot ${vac.lotNumber}' : ''}\n'
-                  '${ref.tr('vaccinations.given')}: ${vac.administeredAt}'
-                  '${vac.nextDueAt != null ? '\n${ref.tr('vaccinations.next')}: ${vac.nextDueAt}' : ''}',
-                ),
-                isThreeLine: true,
+                title: vac.name,
+                lines: [
+                  vac.doseLabel,
+                  '${vac.provider}${vac.lotNumber != null ? ' · lot ${vac.lotNumber}' : ''}',
+                  '${ref.tr('vaccinations.given')}: ${vac.administeredAt}',
+                  if (vac.nextDueAt != null)
+                    '${ref.tr('vaccinations.next')}: ${vac.nextDueAt}',
+                ],
               );
             },
           ),

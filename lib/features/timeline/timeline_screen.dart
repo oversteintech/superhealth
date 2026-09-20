@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/record_providers.dart';
+import '../common/widgets/health_record_card.dart';
 
 class TimelineScreen extends ConsumerWidget {
   const TimelineScreen({super.key});
@@ -37,17 +38,14 @@ class TimelineScreen extends ConsumerWidget {
                   );
                 }
                 final event = events[index - 1];
-                return AfterCard(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(event.title),
-                    subtitle: Text(
-                      '${format.format(event.occurredAt.toLocal())}\n'
-                      '${event.sourceLabel}'
-                      '${event.detail.isEmpty ? '' : '\n${event.detail}'}',
-                    ),
-                    isThreeLine: true,
-                  ),
+                return HealthRecordCard(
+                  title: event.title,
+                  lines: [
+                    format.format(event.occurredAt.toLocal()),
+                    event.sourceLabel,
+                    if (event.detail.isNotEmpty) event.detail,
+                  ],
+                  lineMaxLines: 4,
                 );
               },
             ),

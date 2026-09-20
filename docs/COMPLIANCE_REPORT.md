@@ -59,7 +59,7 @@ Generated for SuperGarage family parity gate. Update when shipping beyond mock.
 
 - Auth: `PrefsGoogleAuthRepository` via `familyPrefsGoogleAuthOverride` (real Google Sign-In; CI uses `mockGoogleEmailForTests`)
 - Sync: `AfterUserBlobSyncPort` + `FamilyCloudSyncController`; default `PrefsAfterUserBlobSync`; AuthGate wraps `FamilySessionEffects`
-- Settings: Sync now + 20-locale language picker
+- Settings: Sync now + 20-locale language picker (`AfterSupportedLocales`, full `assets/l10n/*.json` parity with `en`, contract test in `test/app/l10n/`)
 - Quality: `flutter test --coverage` + `dart tool/check_coverage.dart 80` in CI; smoke suite `test/smoke/`
 - Ops: see supercore `docs/GOOGLE_AND_SYNC_SETUP.md` for OAuth / Firebase cutover
 

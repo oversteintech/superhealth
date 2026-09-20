@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n/app_strings.dart';
 import '../../data/providers/infrastructure_providers.dart';
+import '../common/widgets/health_record_card.dart';
 
 final labResultsProvider = FutureProvider((ref) {
   return ref.watch(healthRepositoryProvider).getLabResults();
@@ -23,28 +24,31 @@ class LabResultsScreen extends ConsumerWidget {
         data: (items) => AfterScaffoldBody(
           child: ListView.separated(
             itemCount: items.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final lab = items[index];
               final color = lab.isFlagged
                   ? Theme.of(context).colorScheme.error
                   : Theme.of(context).colorScheme.primary;
-              return ListTile(
+              return HealthRecordCard(
                 leading: Icon(Icons.science_outlined, color: color),
-                title: Text(lab.testName),
-                subtitle: Text(
-                  '${lab.value} ${lab.unit} · ref ${lab.referenceRange}\n'
+                title: lab.testName,
+                lines: [
+                  '${lab.value} ${lab.unit} · ref ${lab.referenceRange}',
                   '${lab.collectedAt}',
-                ),
-                isThreeLine: true,
-                trailing: Text(
-                  lab.status.toUpperCase(),
-                  style: TextStyle(
-                    color: color,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
+                ],
+                actions: [
+                  Text(
+                    lab.status.toUpperCase(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
+                ],
               );
             },
           ),
