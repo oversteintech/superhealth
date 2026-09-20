@@ -56,8 +56,8 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: assets/branding/super_health_monogram_store.png
-  adaptive_icon_background: "#000000"
+  adaptive_icon_background: "#FFFFFF"
   adaptive_icon_foreground: assets/branding/super_health_monogram_foreground.png
-  adaptive_icon_foreground_inset: 10
+  adaptive_icon_foreground_inset: 0
   min_sdk_android: 21
   remove_alpha_ios: true
