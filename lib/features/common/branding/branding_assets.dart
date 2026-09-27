@@ -1,8 +1,8 @@
 /// Canonical branding asset paths for SuperHealth.
 ///
-/// Approved mark: glossy red heart frame with glowing DNA helix.
+/// Approved mark: chrome S monogram with anatomical heart and ECG pulse.
 abstract final class BrandingAssets {
-  /// In-app monogram — heart + DNA.
+  /// In-app monogram — S + heart + ECG.
   static const monogram = 'assets/branding/super_health_monogram.png';
 
   /// Adaptive icon foreground.

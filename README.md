@@ -40,7 +40,7 @@ Splash Â· Onboarding Â· Authentication Â· Dashboard Â· Vitals Â· AI As
 
 ### Branding
 
-Launcher icon: unique **S+** monogram (family style with SuperGarage SG). Assets live under `assets/branding/` and Android/iOS launcher icons are generated via `dart run flutter_launcher_icons`.
+Launcher icon: metallic **S** wrapping an anatomical heart + EKG pulse. Assets live under `assets/branding/` and Android/iOS launcher icons are generated via `dart run flutter_launcher_icons`.
 
 Cross-cutting: Localization Â· Theme Â· Offline banner Â· Analytics Â· Crash reporting Â· Remote config Â· Feature flags Â· Secure storage Â· Navigation Â· DI Â· Networking Â· Logging Â· Error handling
 

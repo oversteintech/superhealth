@@ -4,9 +4,9 @@ import 'branding_assets.dart';
 
 /// SuperHealth unique monogram mark.
 ///
-/// Renders the store-quality S+ monogram on any surface at a fixed square
-/// size. Falls back to a generic apps glyph if the asset is missing so the
-/// login / splash / profile chrome still renders cleanly.
+/// Renders the store-quality S + heart + ECG mark on any surface at a fixed
+/// square size. Falls back to a generic apps glyph if the asset is missing so
+/// the login / splash / profile chrome still renders cleanly.
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.size = 72});
 
